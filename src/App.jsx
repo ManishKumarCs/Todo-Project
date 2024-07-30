@@ -4,8 +4,8 @@ function App() {
 
   const [createToDo, setCreateToDo] = useState(false);
   const [value, setValue] = useState('');
-   const [todoTaskArray, setTodoTaskArray] = useState(["Clean my computer","Buy a keyboard"]);
-   const [doneTaskArray, setDoneTaskArray] = useState(["Write an article about @xstate/test"]);
+   const [todoTaskArray, setTodoTaskArray] = useState(["Check emails and messages","Review today's agenda and prioritize tasks","Review meeting notes","Implement new features","Update documentation"]);
+   const [doneTaskArray, setDoneTaskArray] = useState([]);
 
   function handleClick() {
     setCreateToDo(!createToDo);
@@ -33,7 +33,7 @@ function App() {
     setDoneTaskArray(filteredArray);
   }
   function handleAnotherUser(){
-    setTodoTaskArray(["Clean my computer","Buy a keyboard"]);
+    setTodoTaskArray(["Make a todo List for today"]);
     setDoneTaskArray(["Todo created by another user"]);
   }
 
@@ -61,7 +61,7 @@ function App() {
          {createToDo && 
           <div className="p-4 space-y-4 border-2 rounded my-4 shadow-md">
             <h3 className="text-xl font-semibold">Create a todo</h3>
-            <input className="border-2 border-gray-200 rounded w-full p-2" placeholder="Write an article about XState" onChange={handleValue}/>
+            <input className="border-2 border-gray-200 rounded w-full p-2" placeholder="Write an Task to add in List" onChange={handleValue}/>
                <button className="bg-yellow-500 px-4 py-2 text-white rounded text-sm font-semibold" onClick={handleTodo}>Save</button>
              <button className="] px-4 py-2 rounded text-sm font-semibold ml-4 border border-gray-400" onClick={handleClick}>Cancel</button>
          </div>}
