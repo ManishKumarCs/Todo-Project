@@ -42,7 +42,7 @@ function App() {
      <div className="min-h-screen">
        <div className="border-b">
      <div className="max-w-7xl h-16 mx-auto flex items-center px-4 lg:px-8">
-         <h1 className="text-xl px-2 font-semibold">TaskMaster</h1>
+         <h1 className="text-xl px-2 font-semibold">XoToDo</h1>
      </div>
        </div>
      <div className="py-8 md:flex justify-between space-y-2 max-w-7xl mx-auto px-4 lg:px-8">
