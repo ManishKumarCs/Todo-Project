@@ -1,38 +1,84 @@
-import React, {useState} from 'react';
-import {Route, Routes, Link} from 'react-router-dom'
-import Header from './Header'
-import Footer from './Footer'
-import NotFound from './NotFound'
-import ProductList from './ProductList'
-import ViewDetails from './ViewDetails'
-import Cart from './Cart'
+import {useState, useEffect} from 'react';
+
 function App() {
-  const getSavedCartCount = localStorage.getItem("my-cart" || "{}");
-  const savedCartCount = JSON.parse(getSavedCartCount);
-  const [cart, setCart]=useState({});
-  console.log(cart);
-      function handleAddtoCartCount(productId, count){
-        const oldCount = cart[productId] || 0;
-        const cartUpdate={...cart, [productId]: oldCount + count}
-        setCart(cartUpdate);
-        const cartCountStore = JSON.stringify(cartUpdate);
-        localStorage.setItem("my-cart", cartCountStore);
-      }
-  const totalCartCount = Object.keys(cart).reduce(function(prev, curr){
-    return prev + cart[curr];
-  },0);
-return(
-  <>
-      <Header cartCount={totalCartCount}></Header>
-      <Routes>
-        <Route path="/" element={<ProductList/>} />
-        <Route path="/viewDetails/:key/" element={<ViewDetails addToCart={handleAddtoCartCount}/>} />
-        <Route path="/cart" element={<Cart cart={cart}></Cart>} />
-        <Route path="*" element={<NotFound/>} />
-      </Routes>
-      <Footer></Footer>
-    </>
-);
+
+  const [createToDo, setCreateToDo] = useState(false);
+  const [value, setValue] = useState('');
+   const [todoTaskArray, setTodoTaskArray] = useState(["Clean my computer","Buy a keyboard"]);
+   const [doneTaskArray, setDoneTaskArray] = useState(["Write an article about @xstate/test"]);
+
+  function handleClick() {
+    setCreateToDo(!createToDo);
+  }
+  function handleValue(e) {
+    setValue(e.target.value);
+  }
+ 
+  function handleTodo(){
+  if(value == "") return alert("Please enter a Task");
+   todoTaskArray.push(value);
+  setCreateToDo(!createToDo);
+    setValue("");
+  }
+  function handleTodoTask(e){
+    const target = e.target.value;
+    const filteredArray = todoTaskArray.filter(function(e) { return e !== target })
+    doneTaskArray.push(target)
+    setTodoTaskArray(filteredArray);
+  }
+  function handleDoneTask(e){
+    const target = e.target.value;
+    const filteredArray = doneTaskArray.filter(function(e) { return e !== target })
+    todoTaskArray.push(target)
+    setDoneTaskArray(filteredArray);
+  }
+  function handleAnotherUser(){
+    setTodoTaskArray(["Clean my computer","Buy a keyboard"]);
+    setDoneTaskArray(["Todo created by another user"]);
+  }
+
+  return (
+   <>
+     <div className="min-h-screen">
+       <div className="border-b">
+     <div className="max-w-7xl h-16 mx-auto flex items-center px-4 lg:px-8">
+         <h1 className="text-xl px-2 font-semibold">TaskMaster</h1>
+     </div>
+       </div>
+     <div className="py-8 md:flex justify-between space-y-2 max-w-7xl mx-auto px-4 lg:px-8">
+       <h2 className="text-3xl font-bold">Things to get done </h2>
+       <button className="bg-yellow-500 px-4 py-2 text-white rounded text-sm font-semibold hover:bg-yellow-600" onClick={handleAnotherUser}>Refresh</button>
+     </div>
+       <div className="max-w-7xl mx-auto px-4 lg:px-8">
+         <h4 className="text-lg font-medium">Things to do</h4>
+         <ul className="mt-4">
+           { todoTaskArray.length==0 && <div className="text-gray-400">No Todo's Here !</div>}
+           { todoTaskArray && todoTaskArray.map(function(item){
+          return <li className="flex gap-3 items-center mt-2 font-medium text-gray-700 text-sm" key={item}><input className="w-4 h-4 " type="checkbox" onClick={handleTodoTask} value={item}/>{item}</li>
+         }
+         )}
+         </ul>
+         {createToDo && 
+          <div className="p-4 space-y-4 border-2 rounded my-4 shadow-md">
+            <h3 className="text-xl font-semibold">Create a todo</h3>
+            <input className="border-2 border-gray-200 rounded w-full p-2" placeholder="Write an article about XState" onChange={handleValue}/>
+               <button className="bg-yellow-500 px-4 py-2 text-white rounded text-sm font-semibold" onClick={handleTodo}>Save</button>
+             <button className="] px-4 py-2 rounded text-sm font-semibold ml-4 border border-gray-400" onClick={handleClick}>Cancel</button>
+         </div>}
+         { !createToDo && <button className="bg-yellow-500 px-4 py-2 text-white rounded-full mt-4 text-sm font-semibold hover:bg-yellow-600" onClick={handleClick}> + Add a todo</button>}
+         <h4 className="text-lg font-semibold mt-4">Things done</h4>
+          <ul className="mt-4">
+             { doneTaskArray.length==0 && <div className="text-gray-400">No Todo's Here !</div>}
+            { doneTaskArray && doneTaskArray.map(function(item){
+              return <li className="flex gap-3 items-center mt-1 font-medium text-gray-700 text-sm" key={item}><input className="w-4 h-4 " type="checkbox" checked onChange={handleDoneTask} value={item}/>{item}</li>
+             }
+             )}
+           
+          </ul>
+       </div>
+    </div>
+   </>
+  );
 }
 
 export default App;
