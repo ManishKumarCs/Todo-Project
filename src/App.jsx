@@ -4,9 +4,24 @@ function App() {
 
   const [createToDo, setCreateToDo] = useState(false);
   const [value, setValue] = useState('');
-   const [todoTaskArray, setTodoTaskArray] = useState(["Check emails and messages","Review today's agenda and prioritize tasks","Review meeting notes","Implement new features","Update documentation"]);
-   const [doneTaskArray, setDoneTaskArray] = useState([]);
 
+  const getToDoTask = () => {
+    const todoStorage = JSON.parse(localStorage.getItem("todoTaskArray"))
+    if(todoStorage) return todoStorage;
+    else return [];
+  }
+  const getDoneTask = () => {
+    const doneStorage = JSON.parse(localStorage.getItem("doneTaskArray"))
+    if(doneStorage) return doneStorage;
+    else return []; 
+  }
+  const [todoTaskArray, setTodoTaskArray] = useState(getToDoTask());
+  const [doneTaskArray, setDoneTaskArray] = useState(getDoneTask());
+  useEffect(function(){
+    localStorage.setItem('todoTaskArray',JSON.stringify(todoTaskArray));
+    localStorage.setItem('doneTaskArray',JSON.stringify(doneTaskArray));
+  },[todoTaskArray, doneTaskArray])
+ 
   function handleClick() {
     setCreateToDo(!createToDo);
   }
@@ -42,7 +57,7 @@ function App() {
      <div className="min-h-screen">
        <div className="border-b">
      <div className="max-w-7xl h-16 mx-auto flex items-center px-4 lg:px-8">
-         <h1 className="text-xl px-2 font-semibold">XoToDo</h1>
+         <h1 className="text-xl px-2 font-semibold">XTodo</h1>
      </div>
        </div>
      <div className="py-8 md:flex justify-between space-y-2 max-w-7xl mx-auto px-4 lg:px-8">
@@ -72,8 +87,7 @@ function App() {
             { doneTaskArray && doneTaskArray.map(function(item){
               return <li className="flex gap-3 items-center mt-1 font-medium text-gray-700 text-sm" key={item}><input className="w-4 h-4 " type="checkbox" checked onChange={handleDoneTask} value={item}/>{item}</li>
              }
-             )}
-           
+             )}    
           </ul>
        </div>
     </div>
